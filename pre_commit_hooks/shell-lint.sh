@@ -1,15 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -o errexit
-set -o pipefail
 set -o nounset
 
-DEBUG=${DEBUG:=0}
-[[ $DEBUG -eq 1 ]] && set -o xtrace
+check () {
+command which shellcheck
+}
 
-if ! command which shellcheck &>/dev/null; then
-  >&2 echo 'shellcheck command not found'
-  exit 1
-fi
-
-shellcheck "$@"
+if check; then
+	shellcheck "$@"
+else
+	echo "Shellcheck missing"
+	exit 1
+fi	
