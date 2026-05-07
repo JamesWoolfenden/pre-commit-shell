@@ -1,5 +1,8 @@
 # pre-commit-shell
-![Branch master](https://img.shields.io/badge/branch-master-brightgreen.svg?style=flat-square)[![Build](https://api.travis-ci.org/detailyang/pre-commit-shell.svg)](https://travis-ci.org/detailyang/pre-commit-shell)[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/detailyang/pre-commit-shell/master/LICENSE)[![release](https://img.shields.io/github/release/detailyang/pre-commit-shell.svg)](https://github.com/detailyang/pre-commit-shell/releases)
+
+![Branch master](https://img.shields.io/badge/branch-master-brightgreen.svg?style=flat-square)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/jameswoolfenden/pre-commit-shell/master/LICENSE)
+[![release](https://img.shields.io/github/release/jameswoolfenden/pre-commit-shell.svg)](https://github.com/jameswoolfenden/pre-commit-shell/releases)
 
 pre-commit-shell is a [pre-commit](https://github.com/pre-commit/pre-commit) component, which wrapper [shellcheck](https://www.shellcheck.net/) to check shell scripts:)
 
@@ -30,8 +33,7 @@ Install
 example .pre-commit-config.yaml as following:
 
 ```yaml
--   repo: git://github.com/detailyang/pre-commit-shell
-    sha: v1.0.6
+-   repo: git://github.com/jameswoolfenden/pre-commit-shell
     hooks:
     - id: shell-lint
       args: [--format=json]
@@ -45,10 +47,10 @@ To contribute to pre-commit-shell, clone this repo locally and commit your code 
 Author
 ------
 
-> GitHub [@detailyang](https://github.com/detailyang)     
+> GitHub [@jameswoolfenden](https://github.com/jameswoolfenden)     
 
 
 License
 -------
 
-pre-commit-shell is licensed under the [MIT](https://github.com/detailyang/pre-commit-shell/blob/master/LICENSE) license.  
+pre-commit-shell is licensed under the [MIT](https://github.com/jameswoolfenden/pre-commit-shell/blob/master/LICENSE) license.  
