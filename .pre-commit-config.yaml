@@ -1,5 +1,9 @@
--   repo: /Users/detailyang/art/opensource/personal/pre-commit-shell
-    sha: 1b26bf757e6d5b9bfed2566339c6464f44779678
+repos:
+  - repo: local
     hooks:
-    -   id: shell-lint
-        exclude: test
+      - id: shell-lint
+        name: Shell Syntax Check
+        entry: pre_commit_hooks/shell-lint.sh
+        language: script
+        types: [shell]
+        exclude: ^test/test\.sh$

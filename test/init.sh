@@ -1,45 +1,50 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-which shellcheck &> /dev/null
-if [[ $? != 0 ]]; then
-    echo "are you sure you have installed shellcheck?"
+set -euo pipefail
+
+if ! command -v shellcheck >/dev/null 2>&1; then
+    echo "shellcheck is not installed" >&2
     exit 1
 fi
 
-cat << EOS > .pre-commit-config.yaml
--   repo: $(pwd)
-    sha: $(git rev-parse HEAD)
+repo_root=$(pwd)
+repo_rev=$(git rev-parse HEAD)
+
+tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/pre-commit-shell.XXXXXX")
+tmpfile=$(mktemp "${TMPDIR:-/tmp}/pre-commit-shell.XXXXXX")
+trap 'rm -rf -- "$tmpdir" "$tmpfile"' EXIT
+
+cp test/test.sh "$tmpdir"
+cat > "$tmpdir/.pre-commit-config.yaml" <<EOS
+repos:
+  - repo: ${repo_root}
+    rev: ${repo_rev}
     hooks:
-    -   id: shell-lint
+      - id: shell-lint
 EOS
 
-tmpdir=$(mktemp -t pre-commit-shell.XXXXXX  -d)
-cp test/test.sh "$tmpdir"
-cp test/.pre-commit-config.yaml "$tmpdir"
-pushd "$tmpdir"
-pwd
-git init
-git config user.email "detailyang@gmail.com"
-git config user.name "detailyang"
-pre-commit install
-git add .pre-commit-config.yaml; git commit -a -m "init test case"
-git add . --all
-tmpfile=$(mktemp -t pre-commit-shell.XXX)
-git commit -a -m "let begin test" &> "$tmpfile"
-popd
-rm -rf "$tmpdir"
+(
+    cd "$tmpdir"
+    git init --quiet
+    git config user.email "test@example.com"
+    git config user.name "test"
+    pre-commit install
+    git add .pre-commit-config.yaml
+    git commit --quiet -m "init test case"
+    git add --all
+    git commit -m "begin test" >"$tmpfile" 2>&1 || true
+)
 
-function passed() {
-    echo "$@"
-
-    return 0
+check() {
+    if grep -q "$1" "$tmpfile"; then
+        echo "$1 PASSED"
+    else
+        echo "$1 FAILED" >&2
+        cat "$tmpfile" >&2
+        exit 255
+    fi
 }
 
-function failed() {
-    echo "$@"
-    exit 255
-}
-
-grep --quiet "SC2115" $tmpfile && passed "SC2115 PASSED" || failed "SC2115 FAILED"
-grep --quiet "SC2086" $tmpfile && passed "SC2086 PASSED" || failed "SC2086 FAILED"
-grep --quiet "SC2034" $tmpfile && passed "SC2034 PASSED" || failed "SC2034 FAILED"
+check SC2115
+check SC2086
+check SC2034

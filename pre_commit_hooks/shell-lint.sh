@@ -1,15 +1,10 @@
 #!/usr/bin/env sh
 
-set -o errexit
-set -o nounset
+set -eu
 
-check () {
-command which shellcheck
-}
-
-if check; then
-	shellcheck "$@"
-else
-	echo "Shellcheck missing"
+if ! command -v shellcheck >/dev/null 2>&1; then
+	echo "shellcheck is not installed (https://www.shellcheck.net/)" >&2
 	exit 1
-fi	
+fi
+
+exec shellcheck "$@"
