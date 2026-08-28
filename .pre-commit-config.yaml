@@ -3,7 +3,9 @@ repos:
     hooks:
       - id: shell-lint
         name: Shell Syntax Check
-        entry: pre_commit_hooks/shell-lint.sh
-        language: script
+        # `repo: local` + `language: python` builds an empty venv, so invoke the
+        # module from the repo root rather than the installed console script.
+        entry: python -m pre_commit_hooks.shell_lint
+        language: python
         types: [shell]
         exclude: ^test/test\.sh$

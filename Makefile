@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	bash test/init.sh
+	python test/init.py

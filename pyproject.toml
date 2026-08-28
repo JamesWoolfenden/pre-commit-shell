@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pre-commit-shell"
+version = "1.0.7"
+description = "Cross-platform pre-commit hook that lints shell scripts with shellcheck"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "James Woolfenden" }]
+
+[project.urls]
+Homepage = "https://github.com/jameswoolfenden/pre-commit-shell"
+
+[project.scripts]
+shell-lint = "pre_commit_hooks.shell_lint:main"
+
+[tool.setuptools]
+packages = ["pre_commit_hooks"]
