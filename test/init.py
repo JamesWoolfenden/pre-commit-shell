@@ -12,7 +12,15 @@ import sys
 import tempfile
 from pathlib import Path
 
-EXPECTED_CODES = ("SC2115", "SC2086", "SC2034")
+# Each entry is a set of acceptable codes for one construct in test.sh; the
+# assertion passes if any of them is reported. shellcheck renumbers findings
+# between releases (the `var = 42` line has been SC1068, SC2034 and SC2283),
+# so pinning a single code makes the suite fail on version bumps alone.
+EXPECTED_CODES = (
+    ("SC2115",),
+    ("SC2086",),
+    ("SC2283", "SC1068", "SC2034"),
+)
 
 
 def run(cmd, cwd=None, check=True):
@@ -60,11 +68,12 @@ def main() -> int:
         output = result.stdout + result.stderr
 
     failed = False
-    for code in EXPECTED_CODES:
-        if code in output:
-            print(f"{code} PASSED")
+    for codes in EXPECTED_CODES:
+        label = "/".join(codes)
+        if any(code in output for code in codes):
+            print(f"{label} PASSED")
         else:
-            print(f"{code} FAILED", file=sys.stderr)
+            print(f"{label} FAILED", file=sys.stderr)
             failed = True
 
     if failed:

@@ -6,6 +6,8 @@
 
 pre-commit-shell is a [pre-commit](https://github.com/pre-commit/pre-commit) hook that wraps [shellcheck](https://www.shellcheck.net/) to lint shell scripts.
 
+The hook entrypoint is Python, so it runs natively on Windows as well as Linux and macOS — no POSIX shell required.
+
 Table of Contents
 -----------------
 
@@ -20,7 +22,8 @@ Requirements
   pre-commit-shell requires the following to run:
 
   * [pre-commit](https://pre-commit.com)
-  * [shellcheck](https://www.shellcheck.net/)
+  * [shellcheck](https://www.shellcheck.net/) on `PATH`
+  * Python 3.8 or later
 
 
 Install
@@ -35,7 +38,7 @@ example .pre-commit-config.yaml as following:
 ```yaml
 repos:
   - repo: https://github.com/jameswoolfenden/pre-commit-shell
-    rev: v1.0.6
+    rev: v1.0.7
     hooks:
       - id: shell-lint
         args: [--format=json]
